@@ -63,9 +63,25 @@ rx_signal = conv_op((L+3):length(conv_op));
 % Computing FFT
 decoded_ofdm = fft(rx_signal);
 
-% Zero-forcing equalization
-H = fft(h, fftSize);
-H_inv = 1 ./ H;
 
-% QAM demodulation
-qam_demod = qamdemod(decoded_ofdm, 2);
+
+
+
+% Perform LS channel estimation
+X = repmat(ofdmSignal(user1Subcarriers), 1, length(h));  % Replicate transmitted signal matrix X for User-1 subcarriers
+H_estimated = ls_channel_estimation(qam_demod, X);
+
+% Display the estimated channel coefficients
+disp('Estimated Channel Coefficients:');
+disp(H_estimated);
+
+% Function for LS channel estimation
+function H_estimated = ls_channel_estimation(Y, X)
+    % Y: Received signal matrix (size: numSubcarriers x numAntennas)
+    % X: Transmitted signal matrix (size: numSubcarriers x numAntennas)
+
+    % Perform LS channel estimation
+    H_estimated = pinv(X) * Y;
+end
+
+
