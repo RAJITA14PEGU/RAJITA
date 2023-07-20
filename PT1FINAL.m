@@ -50,7 +50,7 @@ h = [0.3*h1 0.8*h2 0.2*h3 0.5*h4];
 % Display the generated coefficients
 disp(h);
 
-% Convolution of fading and transmitted signal
+% Convolution between OFDM waveform and complex gaussian channel for user-1
 conv_op = conv(ofdmSignal, h);
 plot(abs(conv_op));
 M = length(conv_op);
