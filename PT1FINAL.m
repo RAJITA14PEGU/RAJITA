@@ -50,7 +50,7 @@ h = [0.3*h1 0.8*h2 0.2*h3 0.5*h4];
 % Display the generated coefficients
 disp(h);
 
-% Convolution between OFDM waveform and complex gaussian channel for user-1
+% Convolution between OFDM waveform and complex Gaussian channel for user-1
 conv_op = conv(ofdmSignal, h);
 plot(abs(conv_op));
 M = length(conv_op);
@@ -63,13 +63,13 @@ rx_signal = conv_op((L+3):length(conv_op));
 % Computing FFT
 decoded_ofdm = fft(rx_signal);
 
-
-
-
-
 % Perform LS channel estimation
 X = repmat(ofdmSignal(user1Subcarriers), 1, length(h));  % Replicate transmitted signal matrix X for User-1 subcarriers
+H_estimated = ls_channel_estimation(decoded_ofdm, X);  % Use the received signal matrix directly
 
+% Display the estimated channel coefficients
+disp('Estimated Channel Coefficients:');
+disp(H_estimated);
 
 % Function for LS channel estimation
 function H_estimated = ls_channel_estimation(Y, X)
@@ -79,5 +79,3 @@ function H_estimated = ls_channel_estimation(Y, X)
     % Perform LS channel estimation
     H_estimated = pinv(X) * Y;
 end
-
-
